@@ -14,6 +14,7 @@ import com.bumptech.glide.request.RequestOptions;
 public class ProcessActivity extends AppCompatActivity implements ChangeDialog.ChangeDialogListener, BackDialog.BackDialogListener{
 
     protected FragmentManager fragManager;
+    protected GlobalState.EffectMode mode;
     Bitmap baseImage;
     ProcImageFragment procViewFragment;
     ImageZoomFragment zoomFragment;
@@ -23,6 +24,7 @@ public class ProcessActivity extends AppCompatActivity implements ChangeDialog.C
     BackDialog backDialog;
 
     public ProcessActivity(){
+        mode = GlobalState.EffectMode.values()[0];
         procViewFragment = new ProcImageFragment();
         testprocessor = new TestProcessor();
         glideOptions = new RequestOptions()

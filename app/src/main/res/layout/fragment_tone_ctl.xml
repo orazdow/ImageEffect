@@ -1,0 +1,84 @@
+<?xml version="1.0" encoding="utf-8"?>
+<android.support.constraint.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".image.ToneCtlFragment">
+
+    <TextView
+        android:id="@+id/brightnessLabel"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="16dp"
+        android:layout_marginTop="2dp"
+        android:text="brightness"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.0"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <SeekBar
+        android:id="@+id/brightnessBar"
+        android:layout_width="match_parent"
+        android:layout_height="27dp"
+        android:layout_marginTop="2dp"
+        android:max="128"
+        android:min="-128"
+        android:progress="0"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.0"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/brightnessLabel" />
+
+
+    <SeekBar
+        android:id="@+id/contrastBar"
+        android:layout_width="match_parent"
+        android:layout_height="27dp"
+        android:layout_marginTop="2dp"
+        android:max="128"
+        android:min="-128"
+        android:progress="0"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.0"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/contrastLabel" />
+
+    <SeekBar
+        android:id="@+id/gammaBar"
+        android:layout_width="match_parent"
+        android:layout_height="27dp"
+        android:layout_marginTop="2dp"
+        android:layout_marginBottom="4dp"
+        android:max="128"
+        android:min="-128"
+        android:progress="0"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.0"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/gammaLAbel"
+        app:layout_constraintVertical_bias="0.009" />
+
+    <TextView
+        android:id="@+id/gammaLAbel"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="16dp"
+        android:layout_marginTop="4dp"
+        android:text="gamma"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/contrastBar" />
+
+    <TextView
+        android:id="@+id/contrastLabel"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="16dp"
+        android:layout_marginTop="4dp"
+        android:text="contrast"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/brightnessBar" />
+
+</android.support.constraint.ConstraintLayout>

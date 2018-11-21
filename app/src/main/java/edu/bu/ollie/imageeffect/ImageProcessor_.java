@@ -5,7 +5,7 @@ import android.graphics.Bitmap;
 import java.nio.IntBuffer;
 import java.util.Stack;
 
-public class ImageProcessor {
+public class ImageProcessor_ {
 
     Bitmap baseImg;
     Stack<IntBuffer> stack;

@@ -5,12 +5,15 @@ import android.os.Bundle;
 import android.support.design.widget.TabLayout;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.ImageView;
+import android.widget.TextView;
+
 import com.bumptech.glide.Glide;
 
 
@@ -66,14 +69,19 @@ public class ImageZoomFragment extends Fragment {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_image_zoom, container, false);
+        parentActivity = (ProcessActivity) getActivity();
         index = GlobalState.currentIndex;
         changeDialog = new ChangeDialog();
         tabLayout = view.findViewById(R.id.effectTabs);
+        //Log.i("HHHEEEEEEEEyyy", Boolean.toString((parentActivity.mode == null)));
+        tabLayout.setScrollPosition(parentActivity.mode.ordinal(), 0, true);
+
         // effect selector tabs
         tabLayout.addOnTabSelectedListener(new TabLayout.BaseOnTabSelectedListener() {
             @Override
             public void onTabSelected(TabLayout.Tab tab) {
-
+                parentActivity.mode = GlobalState.EffectMode.values()[tab.getPosition()];
+                tabLayout.setScrollPosition(tab.getPosition(),0,true);
             }
 
             @Override
@@ -83,9 +91,11 @@ public class ImageZoomFragment extends Fragment {
 
             @Override
             public void onTabReselected(TabLayout.Tab tab) {
-
+                parentActivity.mode = GlobalState.EffectMode.values()[tab.getPosition()];
+                tabLayout.setScrollPosition(tab.getPosition(),0,true);
             }
         });
+
         // swipe listener
         // https://stackoverflow.com/questions/6645537/how-to-detect-the-swipe-left-or-right-in-android
         view.setOnTouchListener(new View.OnTouchListener() {
@@ -126,7 +136,6 @@ public class ImageZoomFragment extends Fragment {
 
             }
         });
-        parentActivity = (ProcessActivity) getActivity();
         fragManager = getFragmentManager();
         image = (ImageView)view.findViewById(R.id.zoomImage);
         displayImage(view);

@@ -1,0 +1,13 @@
+[tone, color, blur, sharpen, edge]
+
+tone:
+brightness
+<-----|------>
+contrast
+<-------|---->
+gamma
+<-----|------>
+
+(reset)
+
+//each slider move applies all 3 in proc()

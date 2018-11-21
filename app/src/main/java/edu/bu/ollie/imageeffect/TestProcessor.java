@@ -4,11 +4,20 @@ import android.graphics.Bitmap;
 
 import java.nio.IntBuffer;
 
+import edu.bu.ollie.imageeffect.image.BrightnessProcessor;
+import edu.bu.ollie.imageeffect.image.ContrastProcessor;
+
 public class TestProcessor {
 
     Bitmap baseImg;
     IntBuffer buffer;
     int w, h, size;
+    ContrastProcessor proc;
+
+    TestProcessor(){
+        proc = new ContrastProcessor();
+        proc.setParam(30);
+    }
 
     void loadImage(Bitmap img){
         baseImg = img;
@@ -36,10 +45,7 @@ public class TestProcessor {
     void process(){
        // Log.i("START_BUFFER_LIMIT", ""+buffer.limit()+" size: "+size+" pos: "+buffer.position()+" remaining: "+buffer.remaining());
         buffer.rewind();
-        for(int i = 0; i < size; i++){
-            int c = buffer.get(i);
-            buffer.put(darken(c, 50));
-        }
+        proc.process(buffer, w, h);
         buffer.rewind();
         baseImg.copyPixelsFromBuffer(buffer);
    }

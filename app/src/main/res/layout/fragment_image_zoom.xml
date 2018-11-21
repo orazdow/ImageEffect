@@ -16,11 +16,11 @@
         android:layout_height="wrap_content" >
 
         <android.support.design.widget.TabItem
-            android:text="blur"
+            android:text="tone"
             android:layout_height="wrap_content"
             android:layout_width="wrap_content" />
         <android.support.design.widget.TabItem
-            android:text="sharpen"
+            android:text="blur/sharpen"
             android:layout_height="wrap_content"
             android:layout_width="wrap_content" />
         <android.support.design.widget.TabItem
