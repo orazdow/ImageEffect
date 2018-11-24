@@ -6,6 +6,8 @@ public abstract class Processor {
 
     public abstract void process(IntBuffer buffer, int w, int h);
 
+    public abstract void process(IntBuffer inbuffer, IntBuffer outbuffer, int w, int h);
+
     public abstract void setParam(String key, double value);
 
     public abstract void setParam(double value);

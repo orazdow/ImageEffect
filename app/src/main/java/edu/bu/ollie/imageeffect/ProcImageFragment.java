@@ -26,7 +26,7 @@ public class ProcImageFragment extends Fragment {
     public ProcImageFragment() {
     }
 
-    void updateImgWindow(){
+    public void updateImgWindow(){
         FragmentTransaction transaction = fragmentManager.beginTransaction();
         transaction.replace(R.id.imgWindow, new ImageWindowFragment());
         transaction.commit();

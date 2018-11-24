@@ -73,7 +73,6 @@ public class ImageZoomFragment extends Fragment {
         index = GlobalState.currentIndex;
         changeDialog = new ChangeDialog();
         tabLayout = view.findViewById(R.id.effectTabs);
-        //Log.i("HHHEEEEEEEEyyy", Boolean.toString((parentActivity.mode == null)));
         tabLayout.setScrollPosition(parentActivity.mode.ordinal(), 0, true);
 
         // effect selector tabs

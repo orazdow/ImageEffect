@@ -6,18 +6,24 @@ import java.nio.IntBuffer;
 
 import edu.bu.ollie.imageeffect.image.BrightnessProcessor;
 import edu.bu.ollie.imageeffect.image.ContrastProcessor;
+import edu.bu.ollie.imageeffect.image.ToneProcessor;
 
 public class TestProcessor {
 
     Bitmap baseImg;
-    IntBuffer buffer;
+    IntBuffer buffer, cleanBuffer;
     int w, h, size;
-    ContrastProcessor proc;
+    ToneProcessor toneproc;
 
     TestProcessor(){
-        proc = new ContrastProcessor();
-        proc.setParam(30);
+        toneproc = new ToneProcessor();
+       // toneproc.setParams(-40,30,30);
     }
+
+    public void setToneBrightness(int b){ toneproc.setBrightness(b);}
+    public void setToneContrast(int c){toneproc.setContrast(c);}
+    public void setToneGamma(int g){toneproc.setGamma(g);}
+
 
     void loadImage(Bitmap img){
         baseImg = img;
@@ -27,6 +33,12 @@ public class TestProcessor {
         buffer = IntBuffer.allocate(size);
         baseImg.copyPixelsToBuffer(buffer);
         buffer.rewind();
+//        savebuffer = IntBuffer.allocate(size);
+//        baseImg.copyPixelsToBuffer(savebuffer);
+//        savebuffer.rewind();
+        cleanBuffer = IntBuffer.allocate(size);
+        baseImg.copyPixelsToBuffer(cleanBuffer);
+        cleanBuffer.rewind();
     }
 
     int darken(int c, int amt){
@@ -42,10 +54,19 @@ public class TestProcessor {
        return a << 24 | r << 16 | g << 8 | b;
     }
 
-    void process(){
+    public void preview(){
+        buffer.rewind();
+        toneproc.process(cleanBuffer, buffer, w, h);
+        cleanBuffer.rewind();
+        buffer.rewind();
+        baseImg.copyPixelsFromBuffer(buffer);
+    }
+
+    public void process(){
        // Log.i("START_BUFFER_LIMIT", ""+buffer.limit()+" size: "+size+" pos: "+buffer.position()+" remaining: "+buffer.remaining());
         buffer.rewind();
-        proc.process(buffer, w, h);
+        toneproc.process(cleanBuffer, buffer, w, h);
+        cleanBuffer.rewind();
         buffer.rewind();
         baseImg.copyPixelsFromBuffer(buffer);
    }

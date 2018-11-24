@@ -14,6 +14,14 @@ public class ContrastProcessor extends Processor {
         }
     }
 
+    @Override
+    public void process(IntBuffer inbuffer, IntBuffer outbuffer, int w, int h) {
+        for(int i = 0; i < w*h; i++){
+            int c = inbuffer.get(i);
+            outbuffer.put(proc(c, val));
+        }
+    }
+
     int proc(int c, int val){
 
         int a = c >> 24;

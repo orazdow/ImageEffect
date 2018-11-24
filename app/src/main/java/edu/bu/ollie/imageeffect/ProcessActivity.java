@@ -16,9 +16,9 @@ public class ProcessActivity extends AppCompatActivity implements ChangeDialog.C
     protected FragmentManager fragManager;
     protected GlobalState.EffectMode mode;
     Bitmap baseImage;
-    ProcImageFragment procViewFragment;
+    public ProcImageFragment procViewFragment;
     ImageZoomFragment zoomFragment;
-    TestProcessor testprocessor;
+    public TestProcessor testprocessor;
     RequestOptions glideOptions;
     boolean imgModified;
     BackDialog backDialog;
@@ -43,6 +43,7 @@ public class ProcessActivity extends AppCompatActivity implements ChangeDialog.C
     protected void toProcView(){
         Bitmap globImage = BitmapFactory.decodeFile(GlobalState.imagePaths.get(GlobalState.currentIndex));
         baseImage = globImage.copy( Bitmap.Config.ARGB_8888 , true);
+
         testprocessor.loadImage(baseImage);
         FragmentTransaction transaction = fragManager.beginTransaction();
         transaction.replace(R.id.procMainView, procViewFragment);
