@@ -6,7 +6,7 @@ import android.support.v4.app.Fragment;
 import edu.bu.ollie.imageeffect.ProcImageFragment;
 import edu.bu.ollie.imageeffect.ProcessActivity;
 
-public class CtlFragment extends Fragment {
+public abstract class CtlFragment extends Fragment {
     ProcessActivity parentActivity;
     ProcImageFragment parentFragment;
     ImageProcessor processor;
@@ -14,6 +14,8 @@ public class CtlFragment extends Fragment {
     HandlerThread handlerThread;
     int pending = 0;
     int sleepTime = 100;
+
+    public abstract void resetControls();
 
     @Override
     public void onResume() {

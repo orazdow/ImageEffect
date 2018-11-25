@@ -35,17 +35,18 @@ public class ProcessActivity extends AppCompatActivity implements ChangeDialog.C
         imgModified = false;
     }
 
-    // process image
-    protected void procImg(){
-        processor.process();
+    protected void apply(){
+        processor.apply();
         imgModified = true;
     }
 
     // start processor view
     protected void toProcView(){
         Bitmap globImage = BitmapFactory.decodeFile(GlobalState.imagePaths.get(GlobalState.currentIndex));
-        baseImage = globImage.copy( Bitmap.Config.ARGB_8888 , true);
-        processor.loadImage(baseImage);
+        if(!imgModified) {
+            baseImage = globImage.copy(Bitmap.Config.ARGB_8888, true);
+            processor.loadImage(baseImage);
+        }
         FragmentTransaction transaction = fragManager.beginTransaction();
         transaction.replace(R.id.procMainView, procViewFragment);
         transaction.addToBackStack( procViewFragment.toString());

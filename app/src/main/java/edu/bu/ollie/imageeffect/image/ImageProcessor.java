@@ -6,7 +6,7 @@ import java.nio.IntBuffer;
 public class ImageProcessor {
 
     Bitmap baseImg;
-    IntBuffer buffer, cleanBuffer;
+    IntBuffer buffer, staticBuffer;
     int w, h, size;
     ToneProcessor toneproc;
 
@@ -27,9 +27,9 @@ public class ImageProcessor {
         buffer = IntBuffer.allocate(size);
         baseImg.copyPixelsToBuffer(buffer);
         buffer.rewind();
-        cleanBuffer = IntBuffer.allocate(size);
-        baseImg.copyPixelsToBuffer(cleanBuffer);
-        cleanBuffer.rewind();
+        staticBuffer = IntBuffer.allocate(size);
+        baseImg.copyPixelsToBuffer(staticBuffer);
+        staticBuffer.rewind();
     }
 
     public void resetParams(){
@@ -38,10 +38,18 @@ public class ImageProcessor {
         toneproc.setGamma(0);
     }
 
+    public void apply(){
+        buffer.flip();
+        staticBuffer.put(buffer);
+        buffer.compact();
+        staticBuffer.rewind();
+        baseImg.copyPixelsFromBuffer(staticBuffer);
+    }
+
     public void process(){
         buffer.rewind();
-        toneproc.process(cleanBuffer, buffer, w, h);
-        cleanBuffer.rewind();
+        toneproc.process(staticBuffer, buffer, w, h);
+        staticBuffer.rewind();
         buffer.rewind();
         baseImg.copyPixelsFromBuffer(buffer);
    }

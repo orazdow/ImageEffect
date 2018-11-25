@@ -83,4 +83,10 @@ public class ToneCtlFragment extends CtlFragment {
         return view;
     }
 
+    @Override
+    public void resetControls() {
+        brightnessBar.setProgress(0);
+        contrastBar.setProgress(0);
+        gammaBar.setProgress(0);
+    }
 }
