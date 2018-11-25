@@ -19,6 +19,10 @@ public class ImageWindowFragment extends Fragment {
     public ImageWindowFragment() {
     }
 
+    void update(){
+
+        Glide.with(getView()).applyDefaultRequestOptions(parentActivity.glideOptions).load(img).into(image);
+    }
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {

@@ -11,6 +11,8 @@ import android.os.Bundle;
 import com.bumptech.glide.load.engine.DiskCacheStrategy;
 import com.bumptech.glide.request.RequestOptions;
 
+import edu.bu.ollie.imageeffect.image.ImageProcessor;
+
 public class ProcessActivity extends AppCompatActivity implements ChangeDialog.ChangeDialogListener, BackDialog.BackDialogListener{
 
     protected FragmentManager fragManager;
@@ -18,7 +20,7 @@ public class ProcessActivity extends AppCompatActivity implements ChangeDialog.C
     Bitmap baseImage;
     public ProcImageFragment procViewFragment;
     ImageZoomFragment zoomFragment;
-    public TestProcessor testprocessor;
+    public ImageProcessor processor;
     RequestOptions glideOptions;
     boolean imgModified;
     BackDialog backDialog;
@@ -26,7 +28,7 @@ public class ProcessActivity extends AppCompatActivity implements ChangeDialog.C
     public ProcessActivity(){
         mode = GlobalState.EffectMode.values()[0];
         procViewFragment = new ProcImageFragment();
-        testprocessor = new TestProcessor();
+        processor = new ImageProcessor();
         glideOptions = new RequestOptions()
                 .diskCacheStrategy(DiskCacheStrategy.NONE)
                 .skipMemoryCache(true);
@@ -35,7 +37,7 @@ public class ProcessActivity extends AppCompatActivity implements ChangeDialog.C
 
     // process image
     protected void procImg(){
-        testprocessor.process();
+        processor.process();
         imgModified = true;
     }
 
@@ -43,8 +45,7 @@ public class ProcessActivity extends AppCompatActivity implements ChangeDialog.C
     protected void toProcView(){
         Bitmap globImage = BitmapFactory.decodeFile(GlobalState.imagePaths.get(GlobalState.currentIndex));
         baseImage = globImage.copy( Bitmap.Config.ARGB_8888 , true);
-
-        testprocessor.loadImage(baseImage);
+        processor.loadImage(baseImage);
         FragmentTransaction transaction = fragManager.beginTransaction();
         transaction.replace(R.id.procMainView, procViewFragment);
         transaction.addToBackStack( procViewFragment.toString());

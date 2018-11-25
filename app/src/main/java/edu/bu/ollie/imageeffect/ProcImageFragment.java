@@ -22,14 +22,22 @@ public class ProcImageFragment extends Fragment {
     TextView effectLabel;
     ProcessActivity parentActivity;
     FragmentManager fragmentManager;
+    ImageWindowFragment imgWindow;
 
     public ProcImageFragment() {
     }
 
     public void updateImgWindow(){
-        FragmentTransaction transaction = fragmentManager.beginTransaction();
-        transaction.replace(R.id.imgWindow, new ImageWindowFragment());
-        transaction.commit();
+        getActivity().runOnUiThread(new Runnable() {
+            @Override
+            public void run() {
+                imgWindow.update();
+            }
+        });
+
+//        FragmentTransaction transaction = fragmentManager.beginTransaction();
+//        transaction.replace(R.id.imgWindow, new ImageWindowFragment());
+//        transaction.commit();
     }
     void addControlFragment(GlobalState.EffectMode mode){
         FragmentTransaction transaction = fragmentManager.beginTransaction();
@@ -51,7 +59,11 @@ public class ProcImageFragment extends Fragment {
         fragmentManager = getFragmentManager();
         effectLabel = view.findViewById(R.id.effect_label);
         effectLabel.setText(parentActivity.mode.toString());
-        updateImgWindow();
+        //updateImgWindow();
+        imgWindow = new ImageWindowFragment();
+        FragmentTransaction transaction = fragmentManager.beginTransaction();
+        transaction.replace(R.id.imgWindow, imgWindow);
+        transaction.commit();
         addControlFragment(parentActivity.mode);
         procButton = (Button)view.findViewById(R.id.procApply);
         revertButton = (Button)view.findViewById(R.id.procRevert);
