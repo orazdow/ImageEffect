@@ -21,17 +21,15 @@ public class MainActivity extends AppCompatActivity {
 
     protected FragmentManager fragManager;
     protected ArrayList<String> imagePaths;
-    protected GalleryFragment galleryFragment;
     protected static final int PERMISSION_RTN = 1;
     protected boolean mediaLoaded = false;
 
     public MainActivity(){
-        imagePaths = GlobalState.imagePaths;
-        galleryFragment = new GalleryFragment();
+        imagePaths = Global.imagePaths;
     }
 
     protected void zoomImage(int index){
-        GlobalState.currentIndex = index;
+        Global.currentIndex = index;
         Intent intent = new Intent(MainActivity.this, ProcessActivity.class);
         startActivity(intent);
     }
@@ -40,9 +38,9 @@ public class MainActivity extends AppCompatActivity {
         Log.d("MAIN_CREATE:","LOADING MEDIA");
         imagePaths.clear();
         Uri uri = MediaStore.Images.Media.EXTERNAL_CONTENT_URI;
-        String[] selector = {MediaStore.Images.Media.DATA};
+        String[] selector = {MediaStore.Images.Media.DATA, MediaStore.Images.Media.DATE_TAKEN};
         CursorLoader loader = new CursorLoader(getApplicationContext(), uri, selector,
-                null, null, MediaStore.Images.Media.DEFAULT_SORT_ORDER);
+                null, null, MediaStore.Images.Media.DATE_TAKEN+" DESC");
         Cursor cursor = loader.loadInBackground();
         int len = cursor.getCount();
         for(int i = 0; i < len; i++){
@@ -57,8 +55,14 @@ public class MainActivity extends AppCompatActivity {
     protected void startGallery(){
         loadMedia();
         FragmentTransaction transaction = fragManager.beginTransaction();
-        transaction.replace(R.id.mainView, galleryFragment);
+        transaction.replace(R.id.mainView, new GalleryFragment());
         transaction.commit();
+    }
+
+    @Override
+    public void onResume() {
+        super.onResume();
+        startGallery();
     }
 
     @Override
@@ -71,10 +75,11 @@ public class MainActivity extends AppCompatActivity {
             if(!mediaLoaded){
                 loadMedia();
             }
-            zoomImage(GlobalState.currentIndex);
+            zoomImage(Global.currentIndex);
 
         }
-        if (ContextCompat.checkSelfPermission(this, Manifest.permission.READ_EXTERNAL_STORAGE) != PackageManager.PERMISSION_GRANTED)
+        if (ContextCompat.checkSelfPermission(this, Manifest.permission.READ_EXTERNAL_STORAGE) != PackageManager.PERMISSION_GRANTED
+                || ContextCompat.checkSelfPermission(this, Manifest.permission.WRITE_EXTERNAL_STORAGE) != PackageManager.PERMISSION_GRANTED)
         {
             ActivityCompat.requestPermissions(this,
                     new String[]{Manifest.permission.READ_EXTERNAL_STORAGE, Manifest.permission.WRITE_EXTERNAL_STORAGE}, PERMISSION_RTN);

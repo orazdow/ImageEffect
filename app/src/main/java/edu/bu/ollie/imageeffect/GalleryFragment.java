@@ -26,7 +26,7 @@ public class GalleryFragment extends Fragment {
         recyclerView.setHasFixedSize(true);
         layoutManager = new GridLayoutManager(getContext(), 3);
         recyclerView.setLayoutManager(layoutManager);
-        galleryAdapter = new GalleryViewAdapter(GlobalState.imagePaths);
+        galleryAdapter = new GalleryViewAdapter(Global.imagePaths);
         recyclerView.setAdapter(galleryAdapter);
         return view;
     }

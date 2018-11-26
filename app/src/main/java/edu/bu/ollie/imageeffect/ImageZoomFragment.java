@@ -12,7 +12,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.ImageView;
-import android.widget.TextView;
+import android.widget.Toast;
 
 import com.bumptech.glide.Glide;
 
@@ -21,7 +21,7 @@ public class ImageZoomFragment extends Fragment {
 
     ImageView image;
     int index = 0;
-    Button processButton;
+    Button processButton, saveButton;
     TabLayout tabLayout;
     ProcessActivity parentActivity;
     FragmentManager fragManager;
@@ -47,21 +47,21 @@ public class ImageZoomFragment extends Fragment {
             Glide.with(view).load(parentActivity.baseImage).into(image);
         }else {
             Glide.with(view).applyDefaultRequestOptions(parentActivity.glideOptions)
-                    .load(GlobalState.imagePaths.get(GlobalState.currentIndex)).into(image);
+                    .load(Global.imagePaths.get(Global.currentIndex)).into(image);
         }
     }
 
     // switch image on swime
     void changeImg(){
         if(swipeDir == SwipeDir.LEFT){
-            index = index-1 < 0 ? GlobalState.imagePaths.size()-1 : index-1;
-            GlobalState.currentIndex = index;
-            Glide.with(getView()).load(GlobalState.imagePaths.get(index)).into(image);
+            index = index-1 < 0 ? Global.imagePaths.size()-1 : index-1;
+            Global.currentIndex = index;
+            Glide.with(getView()).load(Global.imagePaths.get(index)).into(image);
             parentActivity.imgModified = false;
         }else if(swipeDir == SwipeDir.RIGHT){
-            index = (index+1)%GlobalState.imagePaths.size();
-            GlobalState.currentIndex = index;
-            Glide.with(getView()).load(GlobalState.imagePaths.get(index)).into(image);
+            index = (index+1)%Global.imagePaths.size();
+            Global.currentIndex = index;
+            Glide.with(getView()).load(Global.imagePaths.get(index)).into(image);
             parentActivity.imgModified = false;
         }
     }
@@ -70,7 +70,7 @@ public class ImageZoomFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_image_zoom, container, false);
         parentActivity = (ProcessActivity) getActivity();
-        index = GlobalState.currentIndex;
+        index = Global.currentIndex;
         changeDialog = new ChangeDialog();
         tabLayout = view.findViewById(R.id.effectTabs);
         tabLayout.setScrollPosition(parentActivity.mode.ordinal(), 0, true);
@@ -79,7 +79,7 @@ public class ImageZoomFragment extends Fragment {
         tabLayout.addOnTabSelectedListener(new TabLayout.BaseOnTabSelectedListener() {
             @Override
             public void onTabSelected(TabLayout.Tab tab) {
-                parentActivity.mode = GlobalState.EffectMode.values()[tab.getPosition()];
+                parentActivity.mode = Global.EffectMode.values()[tab.getPosition()];
                 tabLayout.setScrollPosition(tab.getPosition(),0,true);
             }
 
@@ -90,10 +90,11 @@ public class ImageZoomFragment extends Fragment {
 
             @Override
             public void onTabReselected(TabLayout.Tab tab) {
-                parentActivity.mode = GlobalState.EffectMode.values()[tab.getPosition()];
+                parentActivity.mode = Global.EffectMode.values()[tab.getPosition()];
                 tabLayout.setScrollPosition(tab.getPosition(),0,true);
             }
         });
+
 
         // swipe listener
         // https://stackoverflow.com/questions/6645537/how-to-detect-the-swipe-left-or-right-in-android
@@ -145,7 +146,31 @@ public class ImageZoomFragment extends Fragment {
                     parentActivity.toProcView();
             }
         });
+        saveButton = (Button)view.findViewById(R.id.saveButton);
+        saveButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                String rtn = parentActivity.save();
+                if(rtn.equalsIgnoreCase("null")){
+                    Toast.makeText(getContext(), "error saving file", Toast.LENGTH_SHORT).show();
+                }
+                else if(rtn.equalsIgnoreCase("nochange")){
+                    Toast.makeText(getContext(), "no changes to save", Toast.LENGTH_SHORT).show();
+                }else {
+                    Toast.makeText(getContext(), rtn+" saved succesfully", Toast.LENGTH_SHORT).show();
+                }
+            }
+        });
         return view;
     }
 
+    @Override
+    public void onViewCreated(View view, Bundle savedInstanceState){
+        if(parentActivity.imgModified){
+            saveButton.setAlpha(1f);
+            saveButton.setClickable(true);
+        }else {
+            saveButton.setAlpha(0.5f);
+            saveButton.setClickable(false);        }
+    }
 }

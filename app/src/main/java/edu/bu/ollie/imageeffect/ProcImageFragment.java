@@ -5,7 +5,6 @@ import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTransaction;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -37,7 +36,7 @@ public class ProcImageFragment extends Fragment {
             }
         });
     }
-    void addControlFragment(GlobalState.EffectMode mode){
+    void addControlFragment(Global.EffectMode mode){
         FragmentTransaction transaction = fragmentManager.beginTransaction();
 
         switch (mode){
@@ -50,7 +49,7 @@ public class ProcImageFragment extends Fragment {
         transaction.commit();
     }
 
-    void resetControls(GlobalState.EffectMode mode){
+    void resetControls(Global.EffectMode mode){
         switch (mode){
             case TONE:
                 toneCtlFragment.resetControls();
