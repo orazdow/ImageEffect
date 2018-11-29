@@ -1,6 +1,7 @@
 package edu.bu.ollie.imageeffect;
 
 
+import android.graphics.Bitmap;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
@@ -9,7 +10,10 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
+import android.widget.ImageView;
 import android.widget.TextView;
+
+import com.bumptech.glide.Glide;
 
 import edu.bu.ollie.imageeffect.image.ToneCtlFragment;
 
@@ -21,8 +25,8 @@ public class ProcImageFragment extends Fragment {
     TextView effectLabel;
     ProcessActivity parentActivity;
     FragmentManager fragmentManager;
-    ImageWindowFragment imgWindow;
-
+    ImageView image;
+    Bitmap img;
     ToneCtlFragment toneCtlFragment;
 
     public ProcImageFragment() {
@@ -32,7 +36,7 @@ public class ProcImageFragment extends Fragment {
         getActivity().runOnUiThread(new Runnable() {
             @Override
             public void run() {
-                imgWindow.update();
+                Glide.with(getView()).applyDefaultRequestOptions(parentActivity.glideOptions).load(img).into(image);
             }
         });
     }
@@ -65,10 +69,9 @@ public class ProcImageFragment extends Fragment {
         fragmentManager = getFragmentManager();
         effectLabel = view.findViewById(R.id.effect_label);
         effectLabel.setText(parentActivity.mode.toString());
-        imgWindow = new ImageWindowFragment();
-        FragmentTransaction transaction = fragmentManager.beginTransaction();
-        transaction.replace(R.id.imgWindow, imgWindow);
-        transaction.commit();
+        image = view.findViewById(R.id.procImage);
+        img = parentActivity.baseImage;
+        Glide.with(view).applyDefaultRequestOptions(parentActivity.glideOptions).load(img).into(image);
         addControlFragment(parentActivity.mode);
         procButton = (Button)view.findViewById(R.id.procApply);
         revertButton = (Button)view.findViewById(R.id.procRevert);
