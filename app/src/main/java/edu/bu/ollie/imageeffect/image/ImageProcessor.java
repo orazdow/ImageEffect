@@ -1,14 +1,19 @@
 package edu.bu.ollie.imageeffect.image;
 
 import android.graphics.Bitmap;
+import android.os.Handler;
+import android.os.HandlerThread;
 import java.nio.IntBuffer;
+import edu.bu.ollie.imageeffect.Global;
 
 public class ImageProcessor {
 
-    Bitmap baseImg;
-    IntBuffer buffer, staticBuffer;
-    int w, h, size;
+    Bitmap baseImg, prevImg;
+    IntBuffer bufferp, staticBufferp, baseBuffer;
+    int w_p, h_p, size_p, w, h, size;
     ToneProcessor toneproc;
+//    HandlerThread handlerThread;
+//    Handler handler;
 
     public ImageProcessor(){
         toneproc = new ToneProcessor();
@@ -19,17 +24,30 @@ public class ImageProcessor {
     public void setToneGamma(int g){toneproc.setGamma(g);}
 
 
-    public void loadImage(Bitmap img){
+    public Bitmap loadImage(Bitmap img){
         baseImg = img;
         w = img.getWidth();
         h = img.getHeight();
         size = w*h;
-        buffer = IntBuffer.allocate(size);
-        baseImg.copyPixelsToBuffer(buffer);
-        buffer.rewind();
-        staticBuffer = IntBuffer.allocate(size);
-        baseImg.copyPixelsToBuffer(staticBuffer);
-        staticBuffer.rewind();
+
+        prevImg = Bitmap.createScaledBitmap(img, Global.preview_width, Math.round(h*(Global.preview_width/(float)w)), false);
+        w_p = prevImg.getWidth();
+        h_p = prevImg.getHeight();
+        size_p = w_p*h_p;
+
+        bufferp = IntBuffer.allocate(size_p);
+        prevImg.copyPixelsToBuffer(bufferp);
+        bufferp.rewind();
+
+        staticBufferp = IntBuffer.allocate(size_p);
+        prevImg.copyPixelsToBuffer(staticBufferp);
+        staticBufferp.rewind();
+
+        baseBuffer = IntBuffer.allocate(size);
+        baseImg.copyPixelsToBuffer(baseBuffer);
+        baseBuffer.rewind();
+
+        return prevImg;
     }
 
     public void resetParams(){
@@ -39,19 +57,25 @@ public class ImageProcessor {
     }
 
     public void apply(){
-        buffer.flip();
-        staticBuffer.put(buffer);
-        buffer.compact();
-        staticBuffer.rewind();
-        baseImg.copyPixelsFromBuffer(staticBuffer);
+        //bufferp.rewind();
+        staticBufferp.rewind();
+        bufferp.flip();
+        staticBufferp.put(bufferp);
+        bufferp.compact();
+        staticBufferp.rewind();
+        // baseImg.copyPixelsFromBuffer(staticBufferp);
+        baseBuffer.rewind();
+        toneproc.process(baseBuffer, w, h);
+        baseBuffer.rewind();
+        baseImg.copyPixelsFromBuffer(baseBuffer);
     }
 
     public void process(){
-        buffer.rewind();
-        toneproc.process(staticBuffer, buffer, w, h);
-        staticBuffer.rewind();
-        buffer.rewind();
-        baseImg.copyPixelsFromBuffer(buffer);
+        bufferp.rewind();
+        toneproc.process(staticBufferp, bufferp, w_p, h_p);
+        staticBufferp.rewind();
+        bufferp.rewind();
+        prevImg.copyPixelsFromBuffer(bufferp);
    }
 
 }

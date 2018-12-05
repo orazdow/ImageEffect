@@ -20,15 +20,15 @@
             android:layout_height="wrap_content"
             android:layout_width="wrap_content" />
         <android.support.design.widget.TabItem
+            android:text="color"
+            android:layout_height="wrap_content"
+            android:layout_width="wrap_content" />
+        <android.support.design.widget.TabItem
             android:text="blur/sharpen"
             android:layout_height="wrap_content"
             android:layout_width="wrap_content" />
         <android.support.design.widget.TabItem
             android:text="edge"
-            android:layout_height="wrap_content"
-            android:layout_width="wrap_content" />
-        <android.support.design.widget.TabItem
-            android:text="tint"
             android:layout_height="wrap_content"
             android:layout_width="wrap_content" />
 

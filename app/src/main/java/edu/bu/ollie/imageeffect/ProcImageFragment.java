@@ -64,13 +64,13 @@ public class ProcImageFragment extends Fragment {
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-        View view = inflater.inflate(R.layout.fragment_proc_image_view, container, false);
+        View view = inflater.inflate(R.layout.fragment_proc_image, container, false);
         parentActivity = (ProcessActivity)getActivity();
         fragmentManager = getFragmentManager();
         effectLabel = view.findViewById(R.id.effect_label);
         effectLabel.setText(parentActivity.mode.toString());
         image = view.findViewById(R.id.procImage);
-        img = parentActivity.baseImage;
+        img = parentActivity.prevImage;
         Glide.with(view).applyDefaultRequestOptions(parentActivity.glideOptions).load(img).into(image);
         addControlFragment(parentActivity.mode);
         procButton = (Button)view.findViewById(R.id.procApply);
@@ -79,7 +79,6 @@ public class ProcImageFragment extends Fragment {
             @Override
             public void onClick(View v) {
                 parentActivity.apply();
-                resetControls(parentActivity.mode);
             }
         });
         revertButton.setOnClickListener(new View.OnClickListener() {

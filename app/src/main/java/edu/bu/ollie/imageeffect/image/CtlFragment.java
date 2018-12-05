@@ -13,7 +13,6 @@ public abstract class CtlFragment extends Fragment {
     Handler handler;
     HandlerThread handlerThread;
     int pending = 0;
-    int sleepTime = 100;
 
     public abstract void resetControls();
 
@@ -33,7 +32,7 @@ public abstract class CtlFragment extends Fragment {
     }
 
     public void handleUpdate(){
-        if(pending == 0){
+        if(pending <= 1){
             pending++;
             handler.post(new Runnable() {
                 @Override
@@ -43,16 +42,7 @@ public abstract class CtlFragment extends Fragment {
                     if(pending > 0){pending--;}
                 }
             });
-        }else if(pending == 1){
-            pending++;
-            handler.postDelayed(new Runnable() {
-                @Override
-                public void run() {
-                    processor.process();
-                    parentFragment.updateImgWindow();
-                    if(pending > 0){pending--;}
-                }
-            }, sleepTime);
         }
+
     }
 }

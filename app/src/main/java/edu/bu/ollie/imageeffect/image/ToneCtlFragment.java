@@ -77,7 +77,6 @@ public class ToneCtlFragment extends CtlFragment {
 
             @Override
             public void onStopTrackingTouch(SeekBar seekBar) {
-
             }
         });
         return view;

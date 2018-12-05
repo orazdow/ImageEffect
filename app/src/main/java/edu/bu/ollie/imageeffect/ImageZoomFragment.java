@@ -5,7 +5,6 @@ import android.os.Bundle;
 import android.support.design.widget.TabLayout;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.MotionEvent;
 import android.view.View;
@@ -69,7 +68,7 @@ public class ImageZoomFragment extends Fragment {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_image_zoom, container, false);
-        parentActivity = (ProcessActivity) getActivity();
+        parentActivity = (ProcessActivity)getActivity();
         index = Global.currentIndex;
         changeDialog = new ChangeDialog();
         tabLayout = view.findViewById(R.id.effectTabs);

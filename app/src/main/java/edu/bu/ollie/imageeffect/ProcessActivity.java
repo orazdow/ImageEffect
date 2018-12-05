@@ -5,13 +5,17 @@ import android.content.ContentValues;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.os.Environment;
+import android.os.Handler;
+import android.os.HandlerThread;
 import android.provider.MediaStore;
 import android.support.v4.app.DialogFragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTransaction;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.util.DisplayMetrics;
 import android.util.Log;
+import android.widget.Toast;
 
 import com.bumptech.glide.load.engine.DiskCacheStrategy;
 import com.bumptech.glide.request.RequestOptions;
@@ -30,7 +34,7 @@ public class ProcessActivity extends AppCompatActivity implements ChangeDialog.C
 
     protected FragmentManager fragManager;
     protected Global.EffectMode mode;
-    Bitmap baseImage;
+    Bitmap baseImage, prevImage;
     File img;
     public ProcImageFragment procViewFragment;
     ImageZoomFragment zoomFragment;
@@ -38,6 +42,11 @@ public class ProcessActivity extends AppCompatActivity implements ChangeDialog.C
     RequestOptions glideOptions;
     boolean imgModified;
     BackDialog backDialog;
+    DisplayMetrics displayMetrics;
+    int screenW, screenH;
+    HandlerThread handlerThread;
+    Handler handler;
+
 
     public ProcessActivity(){
         mode = Global.EffectMode.values()[0];
@@ -47,12 +56,30 @@ public class ProcessActivity extends AppCompatActivity implements ChangeDialog.C
                 .diskCacheStrategy(DiskCacheStrategy.NONE)
                 .skipMemoryCache(true);
         imgModified = false;
+        handlerThread = new HandlerThread("handlerthread");
+        handlerThread.start();
+        handler = new Handler(handlerThread.getLooper());
     }
 
     protected void apply(){
-        processor.apply();
-        imgModified = true;
+        handler.post(new Runnable() {
+            @Override
+            public void run() {
+                processor.apply();
+                imgModified = true;
+
+                runOnUiThread(new Runnable() {
+                    @Override
+                    public void run() {
+                        procViewFragment.resetControls(mode);
+                        Toast.makeText(getApplicationContext(), "EFFECT APPLIED", Toast.LENGTH_SHORT).show();
+                    }
+                });
+
+            }
+        });
     }
+
 
     // start processor view
     protected void toProcView(){
@@ -60,7 +87,9 @@ public class ProcessActivity extends AppCompatActivity implements ChangeDialog.C
         Bitmap globImage = BitmapFactory.decodeFile(img.getAbsolutePath());
         if(!imgModified) {
             baseImage = globImage.copy(Bitmap.Config.ARGB_8888, true);
-            processor.loadImage(baseImage);
+            prevImage = processor.loadImage(baseImage);
+            // Log.i("BaseImg", "W: "+baseImage.getWidth()+" H: "+baseImage.getHeight());
+            // Log.i("prevImg", "W: "+prevImage.getWidth()+" H: "+prevImage.getHeight());
         }
         FragmentTransaction transaction = fragManager.beginTransaction();
         transaction.replace(R.id.procMainView, procViewFragment);
@@ -78,6 +107,12 @@ public class ProcessActivity extends AppCompatActivity implements ChangeDialog.C
         backDialog = new BackDialog();
         transaction.replace(R.id.procMainView, zoomFragment, "zoom_fragment");
         transaction.commit();
+        displayMetrics = new DisplayMetrics();
+        getWindowManager().getDefaultDisplay().getMetrics(displayMetrics);
+        screenW = displayMetrics.widthPixels;
+        screenH = displayMetrics.heightPixels;
+        Log.i("SCREEN_W", Integer.toString(screenW));
+        Log.i("SCREEN_H", Integer.toString(screenH));
     }
 
     @Override // back dialog if imgmodified and zoomfragment active
@@ -110,16 +145,31 @@ public class ProcessActivity extends AppCompatActivity implements ChangeDialog.C
         return str;
     }
 
+    String incrementName(String filename, File saveDir){
+        File[] files = saveDir.listFiles();
+        int n = 0;
+        for (File f : files){
+            String s = f.getName();
+            if(s.equals(filename)){
+                int _n = Integer.parseInt(s.substring(s.indexOf("_imageEffect_")+13,s.lastIndexOf('.')));
+                if(_n >= n){n = _n+1;}
+                filename = filename.substring(0, filename.indexOf("_imageEffect_")+13)+String.valueOf(n)+".jpg";
+            }
+        }
+        return filename;
+    }
+
     // https://stackoverflow.com/questions/21258221/how-to-create-an-app-image-folder-to-show-in-android-gallery
     public String save(){
         if(!imgModified){return "nochange";}
-        String filename = newName(img.getName());
         File saveDir = new File(Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_PICTURES), "ImageEffect");
         if(!saveDir.exists()){saveDir.mkdirs();}
+        String filename = newName(img.getName());
+        filename = incrementName(filename, saveDir);
         File saveFile = new File((saveDir.getPath() + File.separator +filename));
         try {
             if (saveFile == null) {
-                throw new FileNotFoundException("error saving to path");
+                throw new Exception("error saving to path");
             }
             FileOutputStream fos = new FileOutputStream(saveFile);
             baseImage.compress(Bitmap.CompressFormat.JPEG, 90, fos);
