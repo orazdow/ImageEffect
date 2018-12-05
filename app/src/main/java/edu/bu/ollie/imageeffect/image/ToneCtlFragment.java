@@ -27,12 +27,13 @@ public class ToneCtlFragment extends CtlFragment {
         brightnessBar = view.findViewById(R.id.brightnessBar);
         contrastBar = view.findViewById(R.id.contrastBar);
         gammaBar = view.findViewById(R.id.gammaBar);
+        resetControls();
         onCreateInit();
 
         brightnessBar.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
             @Override
             public void onProgressChanged(SeekBar seekBar, int progress, boolean fromUser) {
-                processor.setToneBrightness(seekBar.getProgress());
+                processor.setToneBrightness(seekBar.getProgress()-128);
                 handleUpdate();
             }
 
@@ -49,7 +50,7 @@ public class ToneCtlFragment extends CtlFragment {
         contrastBar.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
             @Override
             public void onProgressChanged(SeekBar seekBar, int progress, boolean fromUser) {
-                processor.setToneContrast(seekBar.getProgress());
+                processor.setToneContrast(seekBar.getProgress()-128);
                 handleUpdate();
             }
 
@@ -66,7 +67,7 @@ public class ToneCtlFragment extends CtlFragment {
         gammaBar.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
             @Override
             public void onProgressChanged(SeekBar seekBar, int progress, boolean fromUser) {
-                processor.setToneGamma(seekBar.getProgress());
+                processor.setToneGamma(seekBar.getProgress()-128);
                 handleUpdate();
             }
 
@@ -84,8 +85,8 @@ public class ToneCtlFragment extends CtlFragment {
 
     @Override
     public void resetControls() {
-        brightnessBar.setProgress(0);
-        contrastBar.setProgress(0);
-        gammaBar.setProgress(0);
+        brightnessBar.setProgress(128);
+        contrastBar.setProgress(128);
+        gammaBar.setProgress(128);
     }
 }

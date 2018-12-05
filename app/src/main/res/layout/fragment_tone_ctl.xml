@@ -11,10 +11,8 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginStart="16dp"
-        android:layout_marginTop="2dp"
         android:text="brightness"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.0"
+        app:layout_constraintBottom_toTopOf="@+id/brightnessBar"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
@@ -22,52 +20,37 @@
         android:id="@+id/brightnessBar"
         android:layout_width="match_parent"
         android:layout_height="27dp"
-        android:layout_marginTop="2dp"
-        android:max="128"
-        android:min="-128"
+        android:max="256"
         android:progress="0"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.5"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/brightnessLabel" />
+        app:layout_constraintBottom_toTopOf="@+id/contrastLabel"
+        app:layout_constraintTop_toBottomOf="@+id/brightnessLabel"/>
 
 
     <SeekBar
         android:id="@+id/contrastBar"
         android:layout_width="match_parent"
         android:layout_height="27dp"
-        android:layout_marginTop="2dp"
-        android:max="128"
-        android:min="-128"
+        android:max="256"
         android:progress="0"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.5"
-        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintBottom_toTopOf="@+id/gammaLabel"
         app:layout_constraintTop_toBottomOf="@+id/contrastLabel" />
 
     <SeekBar
         android:id="@+id/gammaBar"
         android:layout_width="match_parent"
         android:layout_height="27dp"
-        android:layout_marginTop="2dp"
-        android:layout_marginBottom="4dp"
-        android:max="128"
-        android:min="-128"
+        android:max="256"
         android:progress="0"
         app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.5"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/gammaLabel"
-        app:layout_constraintVertical_bias="0.009" />
+        app:layout_constraintTop_toBottomOf="@+id/gammaLabel"/>
 
     <TextView
         android:id="@+id/gammaLabel"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginStart="16dp"
-        android:layout_marginTop="4dp"
         android:text="gamma"
+        app:layout_constraintBottom_toTopOf="@+id/gammaBar"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/contrastBar" />
 
@@ -76,8 +59,8 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginStart="16dp"
-        android:layout_marginTop="4dp"
         android:text="contrast"
+        app:layout_constraintBottom_toTopOf="@+id/contrastBar"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/brightnessBar" />
 
