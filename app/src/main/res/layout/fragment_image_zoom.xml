@@ -1,48 +1,61 @@
 <?xml version="1.0" encoding="utf-8"?>
-<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:tools="http://schemas.android.com/tools"
+<android.support.constraint.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:layout_gravity="center"
-    android:baselineAligned="false"
     tools:context=".ImageZoomFragment">
 
     <android.support.design.widget.TabLayout
         android:id="@+id/effectTabs"
-        app:tabMode="scrollable"
-        android:layout_gravity="center_horizontal"
         android:layout_width="wrap_content"
-        android:layout_height="wrap_content" >
+        android:layout_height="wrap_content"
+        android:layout_gravity="center_horizontal"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.5"
+        app:layout_constraintStart_toStartOf="parent"
+        app:tabMode="scrollable">
 
         <android.support.design.widget.TabItem
-            android:text="tone"
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_width="wrap_content" />
-        <android.support.design.widget.TabItem
-            android:text="color"
-            android:layout_height="wrap_content"
-            android:layout_width="wrap_content" />
-        <android.support.design.widget.TabItem
-            android:text="blur/sharpen"
-            android:layout_height="wrap_content"
-            android:layout_width="wrap_content" />
-        <android.support.design.widget.TabItem
-            android:text="edge"
-            android:layout_height="wrap_content"
-            android:layout_width="wrap_content" />
+            android:text="tone" />
 
-    </android.support.design.widget.TabLayout>>
+        <android.support.design.widget.TabItem
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="color" />
+
+        <android.support.design.widget.TabItem
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="blur/sharpen" />
+
+        <android.support.design.widget.TabItem
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="edge" />
+
+    </android.support.design.widget.TabLayout>
+    >
 
     <ImageView
         android:id="@+id/zoomImage"
         android:layout_width="match_parent"
-        android:layout_height="match_parent" />
-    
+        android:layout_height="393dp"
+        android:layout_marginTop="8dp"
+        android:layout_marginBottom="8dp"
+        app:layout_constrainedHeight="true"
+        app:layout_constraintBottom_toTopOf="@+id/zoombuttons"
+        app:layout_constraintTop_toBottomOf="@+id/effectTabs" />
+
     <LinearLayout
+        android:id="@+id/zoombuttons"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_gravity="bottom">
+        android:layout_gravity="bottom"
+        android:layout_marginBottom="8dp"
+        app:layout_constraintBottom_toBottomOf="parent">
 
         <Button
             android:id="@+id/processButton"
@@ -59,4 +72,4 @@
             android:text="save" />
     </LinearLayout>
 
-</FrameLayout>
+</android.support.constraint.ConstraintLayout>

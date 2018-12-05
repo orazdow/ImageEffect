@@ -54,15 +54,12 @@ public class ImageZoomFragment extends Fragment {
     void changeImg(){
         if(swipeDir == SwipeDir.LEFT){
             index = index-1 < 0 ? Global.imagePaths.size()-1 : index-1;
-            Global.currentIndex = index;
-            Glide.with(getView()).load(Global.imagePaths.get(index)).into(image);
-            parentActivity.imgModified = false;
         }else if(swipeDir == SwipeDir.RIGHT){
             index = (index+1)%Global.imagePaths.size();
-            Global.currentIndex = index;
-            Glide.with(getView()).load(Global.imagePaths.get(index)).into(image);
-            parentActivity.imgModified = false;
         }
+        Global.currentIndex = index;
+        Glide.with(getView()).load(Global.imagePaths.get(index)).into(image);
+        parentActivity.imgModified = false;
     }
 
     @Override

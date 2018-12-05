@@ -1,8 +1,6 @@
 package edu.bu.ollie.imageeffect.image;
 
 import android.graphics.Bitmap;
-import android.os.Handler;
-import android.os.HandlerThread;
 import java.nio.IntBuffer;
 import edu.bu.ollie.imageeffect.Global;
 
@@ -12,8 +10,6 @@ public class ImageProcessor {
     IntBuffer bufferp, staticBufferp, baseBuffer;
     int w_p, h_p, size_p, w, h, size;
     ToneProcessor toneproc;
-//    HandlerThread handlerThread;
-//    Handler handler;
 
     public ImageProcessor(){
         toneproc = new ToneProcessor();
@@ -57,13 +53,11 @@ public class ImageProcessor {
     }
 
     public void apply(){
-        //bufferp.rewind();
         staticBufferp.rewind();
         bufferp.flip();
         staticBufferp.put(bufferp);
         bufferp.compact();
         staticBufferp.rewind();
-        // baseImg.copyPixelsFromBuffer(staticBufferp);
         baseBuffer.rewind();
         toneproc.process(baseBuffer, w, h);
         baseBuffer.rewind();
