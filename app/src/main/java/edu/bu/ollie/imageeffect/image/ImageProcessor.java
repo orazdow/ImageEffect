@@ -1,6 +1,7 @@
 package edu.bu.ollie.imageeffect.image;
 
 import android.graphics.Bitmap;
+import android.graphics.Matrix;
 import java.nio.IntBuffer;
 import edu.bu.ollie.imageeffect.Global;
 
@@ -10,9 +11,10 @@ public class ImageProcessor {
     IntBuffer bufferp, staticBufferp, baseBuffer;
     int w_p, h_p, size_p, w, h, size;
     ToneProcessor toneproc;
-
+    Matrix matrix;
     public ImageProcessor(){
         toneproc = new ToneProcessor();
+        matrix = new Matrix();
     }
 
     public void setToneBrightness(int b){ toneproc.setBrightness(b);}
@@ -25,8 +27,11 @@ public class ImageProcessor {
         w = img.getWidth();
         h = img.getHeight();
         size = w*h;
-
-        prevImg = Bitmap.createScaledBitmap(img, Global.preview_width, Math.round(h*(Global.preview_width/(float)w)), false);
+        //prevImg = Bitmap.createScaledBitmap(img, Global.preview_width, Math.round(h*(Global.preview_width/(float)w)), false);
+        float scale = Global.preview_width/(float)w;
+        matrix.setScale(scale, scale);
+        prevImg = Bitmap.createBitmap(img, 0, 0, w, h, matrix, false);
+        matrix.reset();
         w_p = prevImg.getWidth();
         h_p = prevImg.getHeight();
         size_p = w_p*h_p;

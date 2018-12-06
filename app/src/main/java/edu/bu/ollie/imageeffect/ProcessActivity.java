@@ -4,6 +4,8 @@ import android.content.ContentResolver;
 import android.content.ContentValues;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
+import android.graphics.Matrix;
+import android.media.ExifInterface;
 import android.os.Environment;
 import android.os.Handler;
 import android.os.HandlerThread;
@@ -46,6 +48,8 @@ public class ProcessActivity extends AppCompatActivity implements ChangeDialog.C
     int screenW, screenH;
     HandlerThread handlerThread;
     Handler handler;
+    ExifInterface exif;
+    Matrix matrix;
 
 
     public ProcessActivity(){
@@ -59,6 +63,7 @@ public class ProcessActivity extends AppCompatActivity implements ChangeDialog.C
         handlerThread = new HandlerThread("handlerthread");
         handlerThread.start();
         handler = new Handler(handlerThread.getLooper());
+        matrix = new Matrix();
     }
 
     protected void apply(){
@@ -84,13 +89,26 @@ public class ProcessActivity extends AppCompatActivity implements ChangeDialog.C
     // start processor view
     protected void toProcView(){
         img = new File(Global.imagePaths.get(Global.currentIndex));
+        try {
+            exif = new ExifInterface(img.getAbsolutePath());
+        } catch (IOException e) {
+            Log.e("exif", "error: "+e.getMessage());
+        }
+        int orientation =  exif.getAttributeInt(ExifInterface.TAG_ORIENTATION, 1);
         Bitmap globImage = BitmapFactory.decodeFile(img.getAbsolutePath());
+            if(Global.use_orientation && orientation == ExifInterface.ORIENTATION_ROTATE_90){
+                matrix.setRotate(90);
+            }
+            else if(Global.use_orientation && orientation == ExifInterface.ORIENTATION_ROTATE_270){
+                matrix.setRotate(270);
+            }
+        globImage = Bitmap.createBitmap(globImage, 0, 0,globImage.getWidth(), globImage.getHeight(), matrix, false);
         if(!imgModified) {
             baseImage = globImage.copy(Bitmap.Config.ARGB_8888, true);
             prevImage = processor.loadImage(baseImage);
-            // Log.i("BaseImg", "W: "+baseImage.getWidth()+" H: "+baseImage.getHeight());
-            // Log.i("prevImg", "W: "+prevImage.getWidth()+" H: "+prevImage.getHeight());
         }
+        matrix.reset();
+        globImage.recycle();
         FragmentTransaction transaction = fragManager.beginTransaction();
         transaction.replace(R.id.procMainView, procViewFragment);
         transaction.addToBackStack( procViewFragment.toString());
