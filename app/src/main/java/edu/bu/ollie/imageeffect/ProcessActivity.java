@@ -34,8 +34,8 @@ import edu.bu.ollie.imageeffect.image.ImageProcessor;
 
 public class ProcessActivity extends AppCompatActivity implements ChangeDialog.ChangeDialogListener, BackDialog.BackDialogListener{
 
-    protected FragmentManager fragManager;
-    protected Global.EffectMode mode;
+    public FragmentManager fragManager;
+    public Global.EffectMode mode;
     Bitmap baseImage, prevImage;
     File img;
     public ProcImageFragment procViewFragment;
@@ -55,7 +55,7 @@ public class ProcessActivity extends AppCompatActivity implements ChangeDialog.C
     public ProcessActivity(){
         mode = Global.EffectMode.values()[0];
         procViewFragment = new ProcImageFragment();
-        processor = new ImageProcessor();
+        processor = new ImageProcessor(this);
         glideOptions = new RequestOptions()
                 .diskCacheStrategy(DiskCacheStrategy.NONE)
                 .skipMemoryCache(true);

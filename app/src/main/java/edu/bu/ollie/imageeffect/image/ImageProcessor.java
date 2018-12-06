@@ -4,22 +4,32 @@ import android.graphics.Bitmap;
 import android.graphics.Matrix;
 import java.nio.IntBuffer;
 import edu.bu.ollie.imageeffect.Global;
+import edu.bu.ollie.imageeffect.ProcessActivity;
 
 public class ImageProcessor {
 
     Bitmap baseImg, prevImg;
     IntBuffer bufferp, staticBufferp, baseBuffer;
     int w_p, h_p, size_p, w, h, size;
-    ToneProcessor toneproc;
     Matrix matrix;
-    public ImageProcessor(){
+    ProcessActivity parent;
+
+    ToneProcessor toneproc;
+    ColorProcessor colorproc;
+
+    public ImageProcessor(ProcessActivity parent){
+        this.parent = parent;
         toneproc = new ToneProcessor();
+        colorproc = new ColorProcessor();
         matrix = new Matrix();
     }
 
     public void setToneBrightness(int b){ toneproc.setBrightness(b);}
     public void setToneContrast(int c){toneproc.setContrast(c);}
     public void setToneGamma(int g){toneproc.setGamma(g);}
+
+    public void setcolorHue(int h){colorproc.setHue(h);}
+    public void setcolorSat(int s){colorproc.setSat(s);}
 
 
     public Bitmap loadImage(Bitmap img){
@@ -52,9 +62,16 @@ public class ImageProcessor {
     }
 
     public void resetParams(){
-        toneproc.setBrightness(0);
-        toneproc.setContrast(0);
-        toneproc.setGamma(0);
+        switch(parent.mode){
+            case TONE:
+                toneproc.setBrightness(0);
+                toneproc.setContrast(0);
+                toneproc.setGamma(0);
+                break;
+            case COLOR:
+                colorproc.setHue(0);
+                break;
+        }
     }
 
     public void apply(){
@@ -64,14 +81,28 @@ public class ImageProcessor {
         bufferp.compact();
         staticBufferp.rewind();
         baseBuffer.rewind();
-        toneproc.process(baseBuffer, w, h);
+        switch(parent.mode){
+            case TONE:
+                toneproc.process(baseBuffer, w, h);
+                break;
+            case COLOR:
+                colorproc.process(baseBuffer, w, h);
+                break;
+        }
         baseBuffer.rewind();
         baseImg.copyPixelsFromBuffer(baseBuffer);
     }
 
     public void process(){
         bufferp.rewind();
-        toneproc.process(staticBufferp, bufferp, w_p, h_p);
+        switch(parent.mode){
+            case TONE:
+                toneproc.process(staticBufferp, bufferp, w_p, h_p);
+                break;
+            case COLOR:
+                colorproc.process(staticBufferp, bufferp, w_p, h_p);
+                break;
+        }
         staticBufferp.rewind();
         bufferp.rewind();
         prevImg.copyPixelsFromBuffer(bufferp);

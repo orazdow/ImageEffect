@@ -1,0 +1,45 @@
+<?xml version="1.0" encoding="utf-8"?>
+<android.support.constraint.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".image.ToneCtlFragment">
+
+    <TextView
+        android:id="@+id/hueLabel"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="16dp"
+        android:text="hue"
+        app:layout_constraintBottom_toTopOf="@+id/hueBar"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+    <SeekBar
+        android:id="@+id/hueBar"
+        android:layout_width="match_parent"
+        android:layout_height="27dp"
+        android:max="256"
+        android:progress="0"
+        app:layout_constraintBottom_toTopOf="@+id/satLabel"
+        app:layout_constraintTop_toBottomOf="@+id/hueLabel"/>
+
+    <TextView
+        android:id="@+id/satLabel"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="16dp"
+        android:text="sat"
+        app:layout_constraintBottom_toTopOf="@+id/satBar"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/hueBar" />
+
+    <SeekBar
+        android:id="@+id/satBar"
+        android:layout_width="match_parent"
+        android:layout_height="27dp"
+        android:max="256"
+        android:progress="0"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/satLabel"/>
+</android.support.constraint.ConstraintLayout>

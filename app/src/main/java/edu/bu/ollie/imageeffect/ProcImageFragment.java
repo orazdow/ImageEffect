@@ -16,6 +16,7 @@ import android.widget.TextView;
 
 import com.bumptech.glide.Glide;
 
+import edu.bu.ollie.imageeffect.image.ColorCtlFragment;
 import edu.bu.ollie.imageeffect.image.ToneCtlFragment;
 
 
@@ -29,6 +30,7 @@ public class ProcImageFragment extends Fragment {
     ImageView image;
     Bitmap img;
     ToneCtlFragment toneCtlFragment;
+    ColorCtlFragment colorCtlFragment;
 
     public ProcImageFragment() {
     }
@@ -49,6 +51,10 @@ public class ProcImageFragment extends Fragment {
                 toneCtlFragment = new ToneCtlFragment();
                 transaction.replace(R.id.control_bar, toneCtlFragment);
                 break;
+            case COLOR:
+                colorCtlFragment = new ColorCtlFragment();
+                transaction.replace(R.id.control_bar, colorCtlFragment);
+                break;
         }
 
         transaction.commit();
@@ -59,7 +65,9 @@ public class ProcImageFragment extends Fragment {
             case TONE:
                 toneCtlFragment.resetControls();
                 break;
-
+            case COLOR:
+                colorCtlFragment.resetControls();
+                break;
         }
     }
 

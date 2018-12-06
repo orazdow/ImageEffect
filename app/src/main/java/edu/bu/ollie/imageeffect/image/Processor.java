@@ -19,6 +19,13 @@ public abstract class Processor {
             return 255;
         }else return c;
     }
+    public double clamp(double v){
+        if(v < 0){
+            return 0;
+        }else if(v > 1){
+            return 1;
+        }else return v;
+    }
 
     public int toIndex(int x, int y, int w){
         return y*w+x;
