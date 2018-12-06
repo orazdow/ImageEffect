@@ -16,11 +16,13 @@ public class ImageProcessor {
 
     ToneProcessor toneproc;
     ColorProcessor colorproc;
+    ConvProcessor convproc;
 
     public ImageProcessor(ProcessActivity parent){
         this.parent = parent;
         toneproc = new ToneProcessor();
         colorproc = new ColorProcessor();
+        convproc = new ConvProcessor();
         matrix = new Matrix();
     }
 
@@ -88,6 +90,9 @@ public class ImageProcessor {
             case COLOR:
                 colorproc.process(baseBuffer, w, h);
                 break;
+            case BLUR_SHARP:
+                convproc.process(baseBuffer, w, h);
+                break;
         }
         baseBuffer.rewind();
         baseImg.copyPixelsFromBuffer(baseBuffer);
@@ -101,6 +106,9 @@ public class ImageProcessor {
                 break;
             case COLOR:
                 colorproc.process(staticBufferp, bufferp, w_p, h_p);
+                break;
+            case BLUR_SHARP:
+                convproc.process(staticBufferp, bufferp, w_p, h_p);
                 break;
         }
         staticBufferp.rewind();

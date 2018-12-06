@@ -16,6 +16,7 @@ import android.widget.TextView;
 
 import com.bumptech.glide.Glide;
 
+import edu.bu.ollie.imageeffect.image.BlurCtlFragment;
 import edu.bu.ollie.imageeffect.image.ColorCtlFragment;
 import edu.bu.ollie.imageeffect.image.ToneCtlFragment;
 
@@ -31,6 +32,7 @@ public class ProcImageFragment extends Fragment {
     Bitmap img;
     ToneCtlFragment toneCtlFragment;
     ColorCtlFragment colorCtlFragment;
+    BlurCtlFragment blurCtlFragment;
 
     public ProcImageFragment() {
     }
@@ -54,6 +56,10 @@ public class ProcImageFragment extends Fragment {
             case COLOR:
                 colorCtlFragment = new ColorCtlFragment();
                 transaction.replace(R.id.control_bar, colorCtlFragment);
+                break;
+            case BLUR_SHARP:
+                blurCtlFragment =  new BlurCtlFragment();
+                transaction.replace(R.id.control_bar, blurCtlFragment);
                 break;
         }
 
