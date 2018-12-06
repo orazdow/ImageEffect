@@ -11,7 +11,7 @@ public class Global {
     public enum EffectMode{
         TONE ("tone"),
         COLOR ("color"),
-        BLUR_SHARP ("blur/sharpen"),
+        BLUR("blur"),
         EDGE ("edge");
         private final String name;
         EffectMode(String s) {

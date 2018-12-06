@@ -9,20 +9,22 @@ import edu.bu.ollie.imageeffect.ProcessActivity;
 public class ImageProcessor {
 
     Bitmap baseImg, prevImg;
-    IntBuffer bufferp, staticBufferp, baseBuffer;
+    IntBuffer bufferp, staticBufferp, baseBuffer, staticBaseBuffer;
     int w_p, h_p, size_p, w, h, size;
     Matrix matrix;
     ProcessActivity parent;
 
     ToneProcessor toneproc;
     ColorProcessor colorproc;
-    ConvProcessor convproc;
+    BlurProcessor blurproc;
+    EdgeProcessor edgeproc;
 
     public ImageProcessor(ProcessActivity parent){
         this.parent = parent;
         toneproc = new ToneProcessor();
         colorproc = new ColorProcessor();
-        convproc = new ConvProcessor();
+        blurproc = new BlurProcessor();
+        edgeproc = new EdgeProcessor();
         matrix = new Matrix();
     }
 
@@ -60,6 +62,10 @@ public class ImageProcessor {
         baseImg.copyPixelsToBuffer(baseBuffer);
         baseBuffer.rewind();
 
+        staticBaseBuffer = IntBuffer.allocate(size);
+        baseImg.copyPixelsToBuffer(staticBaseBuffer);
+        staticBaseBuffer.rewind();
+
         return prevImg;
     }
 
@@ -76,6 +82,26 @@ public class ImageProcessor {
         }
     }
 
+    public void applyInPlace(){
+        baseBuffer.rewind();
+        switch(parent.mode){
+            case TONE:
+                toneproc.process(staticBaseBuffer, baseBuffer, w, h);
+                break;
+            case COLOR:
+                colorproc.process(staticBaseBuffer, baseBuffer, w, h);
+                break;
+            case BLUR:
+                blurproc.process(staticBaseBuffer, baseBuffer, w, h);
+                break;
+            case EDGE:
+                edgeproc.process(staticBaseBuffer, baseBuffer, w, h);
+                break;
+        }
+        baseBuffer.rewind();
+        baseImg.copyPixelsFromBuffer(baseBuffer);
+    }
+
     public void apply(){
         staticBufferp.rewind();
         bufferp.flip();
@@ -90,8 +116,11 @@ public class ImageProcessor {
             case COLOR:
                 colorproc.process(baseBuffer, w, h);
                 break;
-            case BLUR_SHARP:
-                convproc.process(baseBuffer, w, h);
+            case BLUR:
+                blurproc.process(baseBuffer, w, h);
+                break;
+            case EDGE:
+                edgeproc.process(baseBuffer, w, h);
                 break;
         }
         baseBuffer.rewind();
@@ -107,8 +136,11 @@ public class ImageProcessor {
             case COLOR:
                 colorproc.process(staticBufferp, bufferp, w_p, h_p);
                 break;
-            case BLUR_SHARP:
-                convproc.process(staticBufferp, bufferp, w_p, h_p);
+            case BLUR:
+                blurproc.process(staticBufferp, bufferp, w_p, h_p);
+                break;
+            case EDGE:
+                edgeproc.process(staticBufferp, bufferp, w_p, h_p);
                 break;
         }
         staticBufferp.rewind();

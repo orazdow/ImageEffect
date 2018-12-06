@@ -6,7 +6,6 @@ import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTransaction;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -57,7 +56,11 @@ public class ProcImageFragment extends Fragment {
                 colorCtlFragment = new ColorCtlFragment();
                 transaction.replace(R.id.control_bar, colorCtlFragment);
                 break;
-            case BLUR_SHARP:
+            case BLUR:
+                blurCtlFragment =  new BlurCtlFragment();
+                transaction.replace(R.id.control_bar, blurCtlFragment);
+                break;
+            case EDGE:
                 blurCtlFragment =  new BlurCtlFragment();
                 transaction.replace(R.id.control_bar, blurCtlFragment);
                 break;

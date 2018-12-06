@@ -8,6 +8,8 @@ public class Convolver {
     public static float[][] lblur = new float[][]{{1, 1, 1, 1, 1},{1, 1, 1, 1, 1},{1, 1, 1, 1, 1}, {1, 1, 1, 1, 1}, {1, 1, 1, 1, 1}};
     public static float[][] gblur = new float[][]{{1, 2, 1},{2, 4, 2},{1, 2, 1}};
     public static float[][] edge = new float[][]{{-1,-1,-1},{-1,8,-1},{-1,-1,-1}};
+    public static float[][] sharp = new float[][]{{0,-1,0},{-1,5,-1},{0,-1,0}};
+
 
     void process(IntBuffer inbuff, IntBuffer outbuff, int w, int h, float[][] kernel){
         float sum = sum(kernel);

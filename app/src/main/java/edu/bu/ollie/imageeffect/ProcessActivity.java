@@ -67,10 +67,14 @@ public class ProcessActivity extends AppCompatActivity implements ChangeDialog.C
     }
 
     protected void apply(){
+        boolean inplace = (mode == Global.EffectMode.EDGE);
         handler.post(new Runnable() {
             @Override
             public void run() {
-                processor.apply();
+                if((mode != Global.EffectMode.EDGE)) // ignore inplace for interesting effect
+                    processor.apply();
+                else processor.applyInPlace();
+
                 imgModified = true;
 
                 runOnUiThread(new Runnable() {
