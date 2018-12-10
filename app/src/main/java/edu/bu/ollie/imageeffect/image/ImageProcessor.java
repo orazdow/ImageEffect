@@ -84,9 +84,8 @@ public class ImageProcessor {
 
     // copy baseImg to preview
     public void copyDownScale(){
-        Matrix m = new Matrix();
-        matrix.postScale(w_p/(float)w, h_p/(float)h);
-        Bitmap b = Bitmap.createBitmap(baseImg, 0, 0, w_p, h_p, m, false);
+        Bitmap b = Bitmap.createScaledBitmap(baseImg, w_p, h_p, false);
+        staticBufferp.rewind();
         b.copyPixelsToBuffer(staticBufferp);
         staticBufferp.rewind();
         prevImg.copyPixelsFromBuffer(staticBufferp);
