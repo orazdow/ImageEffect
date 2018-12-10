@@ -82,6 +82,16 @@ public class ImageProcessor {
         }
     }
 
+    // copy baseImg to preview
+    public void copyDownScale(){
+        Matrix m = new Matrix();
+        matrix.postScale(w_p/(float)w, h_p/(float)h);
+        Bitmap b = Bitmap.createBitmap(baseImg, 0, 0, w_p, h_p, m, false);
+        b.copyPixelsToBuffer(staticBufferp);
+        staticBufferp.rewind();
+        prevImg.copyPixelsFromBuffer(staticBufferp);
+    }
+
     public void applyInPlace(){
         baseBuffer.rewind();
         switch(parent.mode){
@@ -100,6 +110,10 @@ public class ImageProcessor {
         }
         baseBuffer.rewind();
         baseImg.copyPixelsFromBuffer(baseBuffer);
+        if(parent.mode == Global.EffectMode.BLUR || parent.mode == Global.EffectMode.EDGE){
+            copyDownScale();
+            parent.procViewFragment.updateImgWindow();
+        }
     }
 
     public void apply(){
@@ -125,6 +139,10 @@ public class ImageProcessor {
         }
         baseBuffer.rewind();
         baseImg.copyPixelsFromBuffer(baseBuffer);
+        if(parent.mode == Global.EffectMode.BLUR || parent.mode == Global.EffectMode.EDGE){
+            copyDownScale();
+            parent.procViewFragment.updateImgWindow();
+        }
     }
 
     public void process(){
